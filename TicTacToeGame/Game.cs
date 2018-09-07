@@ -9,10 +9,12 @@ namespace TicTacToeGame
         public static int numberOfTimesOWon;
 
         private readonly Action<string> writeToConsole;
+        private readonly Func<string> readFromConsole;
 
-        public Game(Action<string> writeToConsole)
+        public Game(Action<string> writeToConsole, Func<string> readFromConsole)
         {
             this.writeToConsole = writeToConsole;
+            this.readFromConsole = readFromConsole;
         }
 
         public void PlayMultipleTimes()
@@ -37,7 +39,7 @@ namespace TicTacToeGame
             {
                 writeToConsole("Play again? yes/no");
 
-                line = Console.ReadLine();
+                line = readFromConsole();
             } while (!IsYes(line) && !IsNo(line));
 
             return IsYes(line);
@@ -95,13 +97,13 @@ namespace TicTacToeGame
             writeToConsole("Please specify row (1-3):");
 
             int row;
-            while (!int.TryParse(Console.ReadLine(), out row) || row < 1 || row > 3)
+            while (!int.TryParse(readFromConsole(), out row) || row < 1 || row > 3)
                 writeToConsole("Invalid value");
 
             writeToConsole("Please specify column (1-3):");
 
             int column;
-            while (!int.TryParse(Console.ReadLine(), out column) || column < 1 || column > 3)
+            while (!int.TryParse(readFromConsole(), out column) || column < 1 || column > 3)
                 writeToConsole("Invalid value");
 
             return (row - 1, column - 1);
