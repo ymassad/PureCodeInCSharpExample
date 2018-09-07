@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 
 namespace TicTacToeGame
@@ -53,17 +55,17 @@ namespace TicTacToeGame
             return "O";
         }
 
-        private static (int row, int column)[][] lines =
-        {
-            new []{(0,0), (0,1), (0,2)},
-            new []{(1,0), (1,1), (1,2)},
-            new []{(2,0), (2,1), (2,2)},
-            new []{(0,0), (1,0), (2,0)},
-            new []{(0,1), (1,1), (2,1)},
-            new []{(0,2), (1,2), (2,2)},
-            new []{(0,0), (1,1), (2,2)},
-            new []{(0,2), (1,1), (2,0)}
-        };
+
+        private readonly static ImmutableArray<ImmutableArray<(int row, int column)>> lines =
+            ImmutableArray.Create(
+                ImmutableArray.Create((0, 0), (0, 1), (0, 2)),
+                ImmutableArray.Create((1, 0), (1, 1), (1, 2)),
+                ImmutableArray.Create((2, 0), (2, 1), (2, 2)),
+                ImmutableArray.Create((0, 0), (1, 0), (2, 0)),
+                ImmutableArray.Create((0, 1), (1, 1), (2, 1)),
+                ImmutableArray.Create((0, 2), (1, 2), (2, 2)),
+                ImmutableArray.Create((0, 0), (1, 1), (2, 2)),
+                ImmutableArray.Create((0, 2), (1, 1), (2, 0)));
 
     }
 }
