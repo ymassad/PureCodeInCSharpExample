@@ -62,40 +62,46 @@ namespace TicTacToeGame
                 currentPlayer = currentPlayer == Player.X ? Player.O : Player.X;
             }
 
-            while (!board.Winner.HasValue && !board.IsFull())
+            Player? winner = null;
+
+            while (!winner.HasValue && !board.IsFull())
             {
                 writeToConsole("It's player " + currentPlayer + "'s turn");
 
-                PlayOneTurn(currentPlayer, board); 
+                board = PlayOneTurn(currentPlayer, board);
+
+                winner = Board.GetWinner(board);
 
                 SwichPlayer();
             }
 
-            if (board.Winner.HasValue)
+            if (winner.HasValue)
             {
-                writeToConsole(board.Winner + " is a winner");
+                writeToConsole(winner + " is a winner");
             }
             else
             {
                 writeToConsole("Game over. No winner");
             }
 
-            return board.Winner;
+            return winner;
         }
 
-        private void PlayOneTurn(Player currentPlayer, Board board)
+        private Board PlayOneTurn(Player currentPlayer, Board board)
         {
             while (true)
             {
                 var (row, column) = ReadRowAndColumnFromConsole();
 
-                if (!PlayBoard(currentPlayer, board, row, column))
+                var result = PlayBoard(currentPlayer, board, row, column);
+
+                if (!result.success)
                 {
                     writeToConsole("Cell is not empty");
                 }
                 else
                 {
-                    break;
+                    return result.updatedBoard;
                 }
             }
         }
@@ -117,21 +123,23 @@ namespace TicTacToeGame
             return (row - 1, column - 1);
         }
 
-        public bool PlayBoard(Player currentPlayer, Board board, int row, int column)
+        public (bool success, Board updatedBoard) PlayBoard(Player currentPlayer, Board board, int row, int column)
         {
             var cell = board.GetCell(row, column);
 
             if (cell == CellStatus.HasO || cell == CellStatus.HasX)
-                return false;
+                return (false, null);
+
+            Board newBoard;
 
             if (currentPlayer == Player.O)
-                board.SetCell(row, column, CellStatus.HasO);
-            else 
-                board.SetCell(row, column, CellStatus.HasX);
+                newBoard = Board.SetCell(board, row, column, CellStatus.HasO);
+            else
+                newBoard = Board.SetCell(board, row, column, CellStatus.HasX);
 
-            board.PrintToConsole(writeToConsole);
+            newBoard.PrintToConsole(writeToConsole);
 
-            return true;
+            return (true, newBoard);
         }
     }
 }
