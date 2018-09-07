@@ -97,13 +97,13 @@ namespace TicTacToeGame
             writeToConsole("Please specify row (1-3):");
 
             int row;
-            while (!int.TryParse(readFromConsole(), out row) || row < 1 || row > 3)
+            while (!PureInt.TryParseCultureInvariant(readFromConsole(), out row) || row < 1 || row > 3)
                 writeToConsole("Invalid value");
 
             writeToConsole("Please specify column (1-3):");
 
             int column;
-            while (!int.TryParse(readFromConsole(), out column) || column < 1 || column > 3)
+            while (!PureInt.TryParseCultureInvariant(readFromConsole(), out column) || column < 1 || column > 3)
                 writeToConsole("Invalid value");
 
             return (row - 1, column - 1);
