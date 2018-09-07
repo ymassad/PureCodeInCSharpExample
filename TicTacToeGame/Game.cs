@@ -5,9 +5,6 @@ namespace TicTacToeGame
     [IsPure]
     public sealed class Game
     {
-        public static int numberOfTimesXWon;
-        public static int numberOfTimesOWon;
-
         private readonly Action<string> writeToConsole;
         private readonly Func<string> readFromConsole;
 
@@ -19,12 +16,21 @@ namespace TicTacToeGame
 
         public void PlayMultipleTimes()
         {
+            int numberOfTimesXWon = 0;
+            int numberOfTimesOWon = 0;
+
             do
             {
-                PlayGame();
+                var winner = PlayGame();
+
+                if (winner == Player.O)
+                    numberOfTimesOWon++;
+                else if(winner == Player.X)
+                    numberOfTimesXWon++;
 
                 writeToConsole("Number of times X won: " + numberOfTimesXWon);
                 writeToConsole("Number of times O won: " + numberOfTimesOWon);
+
             } while (PlayAgain());
         }
 
@@ -45,7 +51,7 @@ namespace TicTacToeGame
             return IsYes(line);
         }
 
-        private void PlayGame()
+        private Player? PlayGame()
         {
             Board board = new Board();
 
@@ -73,6 +79,8 @@ namespace TicTacToeGame
             {
                 writeToConsole("Game over. No winner");
             }
+
+            return board.Winner;
         }
 
         private void PlayOneTurn(Player currentPlayer, Board board)

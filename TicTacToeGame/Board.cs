@@ -28,11 +28,6 @@ namespace TicTacToeGame
                 if (lines.Any(line => line.All(cell => Cells[cell.row][cell.column] == newValue)))
                 {
                     Winner = newValue == CellStatus.HasO ? Player.O : Player.X;
-
-                    if (Winner == Player.O)
-                        Game.numberOfTimesOWon++;
-                    else
-                        Game.numberOfTimesXWon++;
                 }
 
             }
