@@ -10,7 +10,7 @@ namespace TicTacToeGame
     {
         static void Main(string[] args)
         {
-            new Game().PlayMultipleTimes();
+            new Game(Console.WriteLine).PlayMultipleTimes();
         }
     }
 }

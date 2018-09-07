@@ -2,10 +2,18 @@
 
 namespace TicTacToeGame
 {
+    [IsPure]
     public sealed class Game
     {
         public static int numberOfTimesXWon;
         public static int numberOfTimesOWon;
+
+        private readonly Action<string> writeToConsole;
+
+        public Game(Action<string> writeToConsole)
+        {
+            this.writeToConsole = writeToConsole;
+        }
 
         public void PlayMultipleTimes()
         {
@@ -13,8 +21,8 @@ namespace TicTacToeGame
             {
                 PlayGame();
 
-                Console.WriteLine("Number of times X won: " + numberOfTimesXWon);
-                Console.WriteLine("Number of times O won: " + numberOfTimesOWon);
+                writeToConsole("Number of times X won: " + numberOfTimesXWon);
+                writeToConsole("Number of times O won: " + numberOfTimesOWon);
             } while (PlayAgain());
         }
 
@@ -27,7 +35,7 @@ namespace TicTacToeGame
             string line;
             do
             {
-                Console.WriteLine("Play again? yes/no");
+                writeToConsole("Play again? yes/no");
 
                 line = Console.ReadLine();
             } while (!IsYes(line) && !IsNo(line));
@@ -48,7 +56,7 @@ namespace TicTacToeGame
 
             while (!board.Winner.HasValue && !board.IsFull())
             {
-                Console.WriteLine("It's player " + currentPlayer + "'s turn");
+                writeToConsole("It's player " + currentPlayer + "'s turn");
 
                 PlayOneTurn(currentPlayer, board); 
 
@@ -57,11 +65,11 @@ namespace TicTacToeGame
 
             if (board.Winner.HasValue)
             {
-                Console.WriteLine(board.Winner + " is a winner");
+                writeToConsole(board.Winner + " is a winner");
             }
             else
             {
-                Console.WriteLine("Game over. No winner");
+                writeToConsole("Game over. No winner");
             }
         }
 
@@ -73,7 +81,7 @@ namespace TicTacToeGame
 
                 if (!PlayBoard(currentPlayer, board, row, column))
                 {
-                    Console.WriteLine("Cell is not empty");
+                    writeToConsole("Cell is not empty");
                 }
                 else
                 {
@@ -84,17 +92,17 @@ namespace TicTacToeGame
 
         private (int row, int column) ReadRowAndColumnFromConsole()
         {
-            Console.WriteLine("Please specify row (1-3):");
+            writeToConsole("Please specify row (1-3):");
 
             int row;
             while (!int.TryParse(Console.ReadLine(), out row) || row < 1 || row > 3)
-                Console.WriteLine("Invalid value");
+                writeToConsole("Invalid value");
 
-            Console.WriteLine("Please specify column (1-3):");
+            writeToConsole("Please specify column (1-3):");
 
             int column;
             while (!int.TryParse(Console.ReadLine(), out column) || column < 1 || column > 3)
-                Console.WriteLine("Invalid value");
+                writeToConsole("Invalid value");
 
             return (row - 1, column - 1);
         }
