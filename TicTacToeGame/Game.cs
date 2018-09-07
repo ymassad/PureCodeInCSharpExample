@@ -62,11 +62,45 @@ namespace TicTacToeGame
                 currentPlayer = currentPlayer == Player.X ? Player.O : Player.X;
             }
 
+            bool PlayBoard(int row, int column)
+            {
+                var cell = board.GetCell(row, column);
+
+                if (cell == CellStatus.HasO || cell == CellStatus.HasX)
+                    return false;
+
+                if (currentPlayer == Player.O)
+                    board.SetCell(row, column, CellStatus.HasO);
+                else
+                    board.SetCell(row, column, CellStatus.HasX);
+
+                board.PrintToConsole(writeToConsole);
+
+                return true;
+            }
+
+            void PlayOneTurn()
+            {
+                while (true)
+                {
+                    var (row, column) = ReadRowAndColumnFromConsole();
+
+                    if (!PlayBoard(row, column))
+                    {
+                        writeToConsole("Cell is not empty");
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+
             while (!board.Winner.HasValue && !board.IsFull())
             {
                 writeToConsole("It's player " + currentPlayer + "'s turn");
 
-                PlayOneTurn(currentPlayer, board); 
+                PlayOneTurn(); 
 
                 SwichPlayer();
             }
@@ -81,23 +115,6 @@ namespace TicTacToeGame
             }
 
             return board.Winner;
-        }
-
-        private void PlayOneTurn(Player currentPlayer, Board board)
-        {
-            while (true)
-            {
-                var (row, column) = ReadRowAndColumnFromConsole();
-
-                if (!PlayBoard(currentPlayer, board, row, column))
-                {
-                    writeToConsole("Cell is not empty");
-                }
-                else
-                {
-                    break;
-                }
-            }
         }
 
         private (int row, int column) ReadRowAndColumnFromConsole()
@@ -115,23 +132,6 @@ namespace TicTacToeGame
                 writeToConsole("Invalid value");
 
             return (row - 1, column - 1);
-        }
-
-        public bool PlayBoard(Player currentPlayer, Board board, int row, int column)
-        {
-            var cell = board.GetCell(row, column);
-
-            if (cell == CellStatus.HasO || cell == CellStatus.HasX)
-                return false;
-
-            if (currentPlayer == Player.O)
-                board.SetCell(row, column, CellStatus.HasO);
-            else 
-                board.SetCell(row, column, CellStatus.HasX);
-
-            board.PrintToConsole(writeToConsole);
-
-            return true;
         }
     }
 }
