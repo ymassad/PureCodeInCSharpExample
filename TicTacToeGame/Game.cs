@@ -121,7 +121,7 @@ namespace TicTacToeGame
             else 
                 board.SetCell(row, column, CellStatus.HasX);
 
-            board.PrintToConsole();
+            board.PrintToConsole(writeToConsole);
 
             return true;
         }

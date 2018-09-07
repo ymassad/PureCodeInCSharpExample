@@ -41,11 +41,11 @@ namespace TicTacToeGame
 
         public bool IsFull() => Cells.All(row => row.All(x => x != CellStatus.Empty));
 
-        public void PrintToConsole()
+        public void PrintToConsole(Action<string> writeToConsole)
         {
-            Console.WriteLine(FormatCell(Cells[0][0]) + " " + FormatCell(Cells[0][1]) + " " + FormatCell(Cells[0][2]));
-            Console.WriteLine(FormatCell(Cells[1][0]) + " " + FormatCell(Cells[1][1]) + " " + FormatCell(Cells[1][2]));
-            Console.WriteLine(FormatCell(Cells[2][0]) + " " + FormatCell(Cells[2][1]) + " " + FormatCell(Cells[2][2]));
+            writeToConsole(FormatCell(Cells[0][0]) + " " + FormatCell(Cells[0][1]) + " " + FormatCell(Cells[0][2]));
+            writeToConsole(FormatCell(Cells[1][0]) + " " + FormatCell(Cells[1][1]) + " " + FormatCell(Cells[1][2]));
+            writeToConsole(FormatCell(Cells[2][0]) + " " + FormatCell(Cells[2][1]) + " " + FormatCell(Cells[2][2]));
         }
 
         public string FormatCell(CellStatus status)
