@@ -5,48 +5,35 @@ using System.Linq;
 
 namespace TicTacToeGame
 {
-    [IsPure]
     public sealed class Board
     {
         public Board()
         {
-            Cells = ImmutableArray.Create(
-                ImmutableArray.Create(CellStatus.Empty, CellStatus.Empty, CellStatus.Empty),
-                ImmutableArray.Create(CellStatus.Empty, CellStatus.Empty, CellStatus.Empty),
-                ImmutableArray.Create(CellStatus.Empty, CellStatus.Empty, CellStatus.Empty));
-        }
-        public Board(ImmutableArray<ImmutableArray<CellStatus>> cells)
-        {
-            Cells = cells;
+            Cells = new[] { new CellStatus[3], new CellStatus[3], new CellStatus[3] };
         }
 
-        private ImmutableArray<ImmutableArray<CellStatus>> Cells { get; }
+        private CellStatus[][] Cells { get; }
 
-        public static bool AnyLineIsFullOf(Board board, CellStatus status)
-        {
-            return lines.Any(
-                 line => line.All(
-                     cell => board.Cells[cell.row][cell.column] == status));
-        }
-
-        public static Player? GetWinner(Board board)
-        {
-            if (AnyLineIsFullOf(board, CellStatus.HasX))
-                return Player.X;
-            else if (AnyLineIsFullOf(board, CellStatus.HasO))
-                return Player.O;
-
-            return null;
-        }
+        public Player? Winner { get; private set; }
 
         public CellStatus GetCell(int row, int column)
         {
             return Cells[row][column];
         }
 
-        public static Board SetCell(Board board, int row, int column, CellStatus newValue)
+        public void SetCell(int row, int column, CellStatus newValue)
         {
-            return new Board(board.Cells.SetItem(row, board.Cells[row].SetItem(column, newValue)));
+            Cells[row][column] = newValue;
+
+            if (newValue != CellStatus.Empty)
+            {
+                if (lines.Any(line => line.All(cell => Cells[cell.row][cell.column] == newValue)))
+                {
+                    Winner = newValue == CellStatus.HasO ? Player.O : Player.X;
+                }
+
+            }
+
         }
 
         public bool IsFull() => Cells.All(row => row.All(x => x != CellStatus.Empty));
